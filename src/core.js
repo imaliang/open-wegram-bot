@@ -127,12 +127,12 @@ export async function handleWebhook(request, ownerUid, botToken, secretToken) {
 
         const copyMessage = async function (withUrl = false) {
             const ik = [[{
-                text: `🔏 ${senderName} [${senderUid}]`,
+                text: `🔏 ${senderName} ~ ${senderUid}`,
                 callback_data: senderUid,
             }]];
 
             if (withUrl) {
-                ik[0][0].text = `🔓 ${senderName} [${senderUid}]`
+                ik[0][0].text = `🔓 ${senderName} ~ ${senderUid}`
                 ik[0][0].url = `tg://user?id=${senderUid}`;
             }
 
