@@ -87,26 +87,14 @@ export async function handleWebhook(request, ownerUid, botToken, secretToken) {
     const message = update.message;
     const reply = message.reply_to_message;
     try {
-        // 如果是机器人主人回复用户的消息
         if (reply && message.chat.id.toString() === ownerUid) {
-            let senderUid;
-            
-            // 获取原消息的内联键盘标记
             const rm = reply.reply_markup;
             if (rm && rm.inline_keyboard && rm.inline_keyboard.length > 0) {
-                // 从内联键盘中获取发送者ID
-                senderUid = rm.inline_keyboard[0][0].callback_data;
-                // 如果callback_data为空,则从url中获取发送者ID
+                let senderUid = rm.inline_keyboard[0][0].callback_data;
                 if (!senderUid) {
                     senderUid = rm.inline_keyboard[0][0].url.split('tg://user?id=')[1];
                 }
-            } else if (reply.forward_from) {
-                // 如果是转发消息,从forward_from中获取发送者ID
-                senderUid = reply.forward_from.id.toString();
-            }
 
-            if (senderUid) {
-                // 将机器人主人的回复转发给原消息发送者
                 await postToTelegramApi(botToken, 'copyMessage', {
                     chat_id: parseInt(senderUid),
                     from_chat_id: message.chat.id,
@@ -139,19 +127,20 @@ export async function handleWebhook(request, ownerUid, botToken, secretToken) {
 
         const copyMessage = async function (withUrl = false) {
             const ik = [[{
-                text: `🔏 ${senderName} （${senderUid}）`,
+                text: `🔏 ${senderName} 🆔 ${senderUid}`,
                 callback_data: senderUid,
             }]];
 
             if (withUrl) {
-                ik[0][0].text = `🔓 ${senderName} （${senderUid}）`
+                ik[0][0].text = `🔓 ${senderName} 🆔 ${senderUid}`
                 ik[0][0].url = `tg://user?id=${senderUid}`;
             }
 
-            return await postToTelegramApi(botToken, 'forwardMessage', {
+            return await postToTelegramApi(botToken, 'copyMessage', {
                 chat_id: parseInt(ownerUid),
                 from_chat_id: message.chat.id,
-                message_id: message.message_id
+                message_id: message.message_id,
+                reply_markup: {inline_keyboard: ik}
             });
         }
 
