@@ -136,7 +136,7 @@ export async function handleWebhook(request, ownerUid, botToken, secretToken) {
                 ik[0][0].url = `tg://user?id=${senderUid}`;
             }
 
-            return await postToTelegramApi(botToken, 'copyMessage', {
+            return await postToTelegramApi(botToken, 'forwardMessage', {
                 chat_id: parseInt(ownerUid),
                 from_chat_id: message.chat.id,
                 message_id: message.message_id,
