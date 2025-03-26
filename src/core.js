@@ -106,6 +106,18 @@ export async function handleWebhook(request, ownerUid, botToken, secretToken) {
         }
 
         if ("/start" === message.text) {
+            await postToTelegramApi(botToken, 'sendMessage', {
+                chat_id: message.chat.id,
+                text: '👋 <b>欢迎使用 CMS捐赠码机器人！</b>\n\n' +
+                      '您只需要向机器人发送：\n' +
+                      '• 支付订单号截图\n' +
+                      '• 您的邮箱\n\n' +
+                      '我们将在24小时内发送您的捐赠码。\n\n' +
+                      '📚 <a href="https://wiki.cmscc.cc">Wiki 文档</a>\n' +
+                      '👥 <a href="https://t.me/cloud_media_sync">Telegram 群组</a>',
+                parse_mode: 'HTML',
+                disable_web_page_preview: true
+            });
             return new Response('OK');
         }
 
@@ -115,12 +127,12 @@ export async function handleWebhook(request, ownerUid, botToken, secretToken) {
 
         const copyMessage = async function (withUrl = false) {
             const ik = [[{
-                text: `🔏 From: ${senderName} (${senderUid})`,
+                text: `🔏 ${senderName} （${senderUid}）`,
                 callback_data: senderUid,
             }]];
 
             if (withUrl) {
-                ik[0][0].text = `🔓 From: ${senderName} (${senderUid})`
+                ik[0][0].text = `🔓 ${senderName} （${senderUid}）`
                 ik[0][0].url = `tg://user?id=${senderUid}`;
             }
 
