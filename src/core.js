@@ -95,7 +95,7 @@ export async function handleWebhook(request, ownerUid, botToken, secretToken) {
                     senderUid = rm.inline_keyboard[0][0].url.split('tg://user?id=')[1];
                 }
 
-                await postToTelegramApi(botToken, 'copyMessage', {
+                await postToTelegramApi(botToken, 'forwardMessage', {
                     chat_id: parseInt(senderUid),
                     from_chat_id: message.chat.id,
                     message_id: message.message_id
@@ -139,8 +139,7 @@ export async function handleWebhook(request, ownerUid, botToken, secretToken) {
             return await postToTelegramApi(botToken, 'forwardMessage', {
                 chat_id: parseInt(ownerUid),
                 from_chat_id: message.chat.id,
-                message_id: message.message_id,
-                reply_markup: {inline_keyboard: ik}
+                message_id: message.message_id
             });
         }
 
