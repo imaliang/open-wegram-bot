@@ -106,18 +106,49 @@ export async function handleWebhook(request, ownerUid, botToken, secretToken) {
         }
 
         if ("/start" === message.text) {
+            const chatId = message.chat.id;
             await postToTelegramApi(botToken, 'sendMessage', {
-                chat_id: message.chat.id,
+                chat_id: chatId,
                 text: '👋 <b>欢迎使用 CMS捐赠码机器人！</b>\n\n' +
                       '您只需要向机器人发送：\n' +
                       '• 支付订单号截图\n' +
                       '• 您的邮箱\n\n' +
-                      '我们将在24小时内发送您的捐赠码。\n\n' +
+                      '我们将在24小时内发送给您捐赠码。\n\n' +
                       '📚 <a href="https://wiki.cmscc.cc">Wiki 文档</a>\n' +
-                      '👥 <a href="https://t.me/cloud_media_sync">Telegram 群组</a>',
+                      '👥 <a href="https://t.me/cloud_media_sync">Telegram 群组</a>\n\n' +
+                      `🆔 <b>您的用户ID</b>: <code>${chatId}</code>`,
                 parse_mode: 'HTML',
                 disable_web_page_preview: true
             });
+            return new Response('OK');
+        }
+
+        if ("/id" === message.text) {
+            const chatId = message.chat.id;
+            const userName = message.from.username ? `@${message.from.username}` : [message.from.first_name, message.from.last_name].filter(Boolean).join(' ');
+            
+            await postToTelegramApi(botToken, 'sendMessage', {
+                chat_id: chatId,
+                text: `🆔 <b>用户信息</b>\n\n` +
+                      `用户名: ${userName}\n` +
+                      `用户ID: <code>${chatId}</code>\n\n` +
+                      `您可以长按ID进行复制`,
+                parse_mode: 'HTML'
+            });
+            return new Response('OK');
+        }
+
+        // 处理回调查询 (callback queries)，用于复制ID功能
+        if (update.callback_query && update.callback_query.data.startsWith('copy_id_')) {
+            const callbackQuery = update.callback_query;
+            const userId = callbackQuery.data.split('copy_id_')[1];
+            
+            await postToTelegramApi(botToken, 'answerCallbackQuery', {
+                callback_query_id: callbackQuery.id,
+                text: `ID ${userId} 已复制到剪贴板`,
+                show_alert: false
+            });
+            
             return new Response('OK');
         }
 
