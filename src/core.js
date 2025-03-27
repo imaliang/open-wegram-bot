@@ -125,7 +125,8 @@ export async function handleWebhook(request, ownerUid, botToken, secretToken) {
 
         if ("/id" === message.text) {
             const chatId = message.chat.id;
-            const userName = message.from.username ? `@${message.from.username}` : [message.from.first_name, message.from.last_name].filter(Boolean).join(' ');
+            // const userName = message.from.username ? `@${message.from.username}` : [message.from.first_name, message.from.last_name].filter(Boolean).join(' ');
+            const userName = [message.from.first_name, message.from.last_name].filter(Boolean).join(' ');
             
             await postToTelegramApi(botToken, 'sendMessage', {
                 chat_id: chatId,
@@ -140,7 +141,8 @@ export async function handleWebhook(request, ownerUid, botToken, secretToken) {
 
         const sender = message.chat;
         const senderUid = sender.id.toString();
-        const senderName = sender.username ? `@${sender.username}` : [sender.first_name, sender.last_name].filter(Boolean).join(' ');
+        // const senderName = sender.username ? `@${sender.username}` : [sender.first_name, sender.last_name].filter(Boolean).join(' ');
+        const senderName = [sender.first_name, sender.last_name].filter(Boolean).join(' ');
 
         const copyMessage = async function (withUrl = false) {
             const ik = [[{
