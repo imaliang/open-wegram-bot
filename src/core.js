@@ -74,6 +74,27 @@ export async function handleUninstall(botToken, secretToken) {
     }
 }
 
+export async function initializeBotMenu(botToken) {
+    try {
+        const response = await postToTelegramApi(botToken, 'setMyCommands', {
+            commands: [
+                {command: '/start', description: '立即开始'},
+                {command: '/id', description: '获取你的用户id'},
+            ]
+        });
+
+        const result = await response.json();
+        if (result.ok) {
+            console.log('Bot menu initialized successfully.');
+        } else {
+            console.error(`Failed to initialize bot menu: ${result.description}`);
+        }
+    } catch (error) {
+        console.error('Error initializing bot menu:', error);
+    }
+}
+
+// ... existing code ...
 export async function handleWebhook(request, ownerUid, botToken, secretToken) {
     if (secretToken !== request.headers.get('X-Telegram-Bot-Api-Secret-Token')) {
         return new Response('Unauthorized', {status: 401});
@@ -188,6 +209,7 @@ export async function handleRequest(request, config) {
     let match;
 
     if (match = path.match(INSTALL_PATTERN)) {
+        initializeBotMenu(match[2]);
         return handleInstall(request, match[1], match[2], prefix, secretToken);
     }
 
