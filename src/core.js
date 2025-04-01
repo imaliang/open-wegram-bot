@@ -136,8 +136,8 @@ export async function handleWebhook(request, ownerUid, botToken, secretToken) {
                       '• 您的邮箱\n\n' +
                       '我将在24小时内发送给你捐赠码\n\n' +
                       '💰 <a href="https://wiki.cmscc.cc/donate">捐赠地址</a>\n' +
-                      '📚 <a href="https://wiki.cmscc.cc">Wiki 文档</a>\n' +
-                      '👥 <a href="https://t.me/cloud_media_sync">Telegram 群组</a>\n\n' +
+                      '📚 <a href="https://wiki.cmscc.cc">使用文档</a>\n' +
+                      '👥 <a href="https://t.me/cloud_media_sync">讨论群组</a>\n\n' +
                       `🆔 <b>你的用户ID</b>: <code>${chatId}</code>`,
                 parse_mode: 'HTML',
                 disable_web_page_preview: true
