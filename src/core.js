@@ -133,7 +133,7 @@ export async function handleWebhook(request, ownerUid, botToken, secretToken) {
                 text: '👋 <b>欢迎使用CMS捐赠机器人！</b>\n\n' +
                       '你只需要向机器人发送：\n' +
                       '• 支付订单号截图\n' +
-                      '• 您的邮箱\n\n' +
+                      '• 你的邮箱\n\n' +
                       '我将在24小时内发送给你捐赠码\n\n' +
                       '💰 <a href="https://wiki.cmscc.cc/donate">捐赠地址</a>\n' +
                       '📚 <a href="https://wiki.cmscc.cc">使用文档</a>\n' +
